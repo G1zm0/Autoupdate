@@ -14,9 +14,12 @@
 #
 #------------------------------------------
 
-PATH_TO_SICKBEARD=/usr/local/sickbeard
-PATH_TO_COUCHPOTATO=/usr/local/couchpotato
-PATH_TO_HEADPHONES=/usr/local/headphones
+PATH_TO_SICKBEARD=/usr/local/var/sickbeard
+PATH_TO_SCRIPTS_SICKBEARD=/var/packages/SickBeard/scripts
+PATH_TO_COUCHPOTATO=/usr/local/var/couchpotato
+PATH_TO_SCRIPTS_COUCHPOTATO=/var/packages/SickBeard/scripts
+PATH_TO_HEADPHONES=/usr/local/var/headphones
+PATH_TO_SCRIPTS_HEADPHONES=/var/packages/SickBeard/scripts
 PATH_TO_SUBLIMINAL=/volume1/@appstore/subliminal
 
 GIT_APP=$(which git)	                # Find the git
@@ -36,7 +39,11 @@ sickbeard_dir_check () {
 #Update function
 
 stop_sickbeard () {
-	$PATH_TO_SICKBEARD/start_stop stop;
+	$PATH_TO_SCRIPTS_SICKBEARD/start-stop-status stop;
+}
+
+start_sickbeard () {
+	$PATH_TO_SCRIPTS_SICKBEARD/start-stop-status start;
 }
 
 update_sickbeard () {
@@ -49,9 +56,12 @@ update_sickbeard () {
 	# Manual update
     echo "* Updating $DESC ..."
     /bin/sh -c "$GIT --git-dir=$APP_PATH/.git pull" || exit 1
+	
+	start_sickbeard
 }
 
 # step 2 update couchpotato
+
 # Check if Couchpotato is installed correct
 sickbeard_dir_check () {
     if [ $PATH_TO_COUCHPOTATO ]; then    
@@ -62,8 +72,8 @@ sickbeard_dir_check () {
         fi
     fi
 }
-#Update function
 
+#Update function
 stop_couchpotato () {
     if [ $PATH_TO_SICKBEARD ]; then    
         if [ ! -d $LOG_DIR ]; then
