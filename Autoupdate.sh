@@ -55,7 +55,7 @@ update_sickbeard () {
 	
 	# Manual update
     echo "* Updating $DESC ..."
-    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD/.git pull" || exit 1
+    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD pull" || exit 1
 	
 	start_sickbeard
 }
