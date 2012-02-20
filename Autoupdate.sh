@@ -55,12 +55,13 @@ update_sickbeard () {
 	
 	# Manual update
     echo "* Updating $DESC ..."
-    /bin/sh -c "$GIT --git-dir=$APP_PATH/.git pull" || exit 1
+    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD/.git pull" || exit 1
 	
 	start_sickbeard
 }
+update_sickbeard;
 
-# step 2 update couchpotato
+# step 2 update Couchpotato
 
 # Check if Couchpotato is installed correct
 sickbeard_dir_check () {
@@ -73,27 +74,28 @@ sickbeard_dir_check () {
     fi
 }
 
-#Update function
-stop_couchpotato () {
-    if [ $PATH_TO_SICKBEARD ]; then    
-        if [ ! -d $LOG_DIR ]; then
-            echo "Sickbeard is running!";
-            echo "Stopping";
-			$PATH_TO_SICKBEARD/start_stop stop;
-        fi
-    fi
+
+stop_sickbeard () {
+	$PATH_TO_SCRIPTS_COUCHPOTATO/start-stop-status stop;
 }
 
-update_sickbeard () {
+start_sickbeard () {
+	$PATH_TO_SCRIPTS_COUCHPOTATO/start-stop-status start;
+}
+
+#Update function
+update_couchpotato () {
     #Start
-	echo "* Starting Sickbeard update ...";
+	echo "* Starting Couchpotato update ...";
 	
-	sickbeard_dir_check
-	stop_sickbeard
+	couchpotato_dir_check
+	stop_couchpotato
 	
 	# Manual update
     echo "* Updating $DESC ..."
-    /bin/sh -c "$GIT --git-dir=$APP_PATH/.git pull" || exit 1
+    /bin/sh -c "$GIT --git-dir=$PATH_TO_COUCHPOTATO/.git pull" || exit 1 /bin/sh -c ##"cd $APP_PATH && $GIT pull"
+	
+	start_couchpotato
 }
 
 
