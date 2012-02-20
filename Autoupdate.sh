@@ -1,0 +1,135 @@
+#!/bin/sh
+#------------------------------------------
+# Autoupdate script Synology NAS with Zebulon packages 
+#
+#
+# Author: K.Meun (Gizmo)
+#
+# Location: /volume1/@appstore/scripts
+#
+# Version:
+#
+# 2011-10-22:
+# - Initial release
+#
+#------------------------------------------
+
+PATH_TO_SICKBEARD=/usr/local/sickbeard
+PATH_TO_COUCHPOTATO=/usr/local/couchpotato
+PATH_TO_HEADPHONES=/usr/local/headphones
+PATH_TO_SUBLIMINAL=/volume1/@appstore/subliminal
+
+GIT_APP=$(which git)	                # Find the git
+
+#step 1 update SickBeard
+
+# Check if Sickbeard is installed correct
+sickbeard_dir_check () {
+    if [ $PATH_TO_SICKBEARD ]; then    
+        if [ ! -d $PATH_TO_SICKBEARD ]; then
+            echo "Sickbeard not installed or no Zebulon Package used!";
+            echo "Skipping";
+			break;
+        fi
+    fi
+}
+#Update function
+
+stop_sickbeard () {
+	$PATH_TO_SICKBEARD/start_stop stop;
+}
+
+update_sickbeard () {
+    #Start
+	echo "* Starting Sickbeard update ...";
+	
+	sickbeard_dir_check
+	stop_sickbeard
+	
+	# Manual update
+    echo "* Updating $DESC ..."
+    /bin/sh -c "$GIT --git-dir=$APP_PATH/.git pull" || exit 1
+}
+
+# step 2 update couchpotato
+# Check if Couchpotato is installed correct
+sickbeard_dir_check () {
+    if [ $PATH_TO_COUCHPOTATO ]; then    
+        if [ ! -d $PATH_TO_COUCHPOTATO ]; then
+            echo "Couchpotato not installed or no Zebulon Package used!";
+            echo "Skipping";
+			break;
+        fi
+    fi
+}
+#Update function
+
+stop_couchpotato () {
+    if [ $PATH_TO_SICKBEARD ]; then    
+        if [ ! -d $LOG_DIR ]; then
+            echo "Sickbeard is running!";
+            echo "Stopping";
+			$PATH_TO_SICKBEARD/start_stop stop;
+        fi
+    fi
+}
+
+update_sickbeard () {
+    #Start
+	echo "* Starting Sickbeard update ...";
+	
+	sickbeard_dir_check
+	stop_sickbeard
+	
+	# Manual update
+    echo "* Updating $DESC ..."
+    /bin/sh -c "$GIT --git-dir=$APP_PATH/.git pull" || exit 1
+}
+
+
+
+# step 4 Updating subliminal
+cd $PATH_TO_SUBLIMINAL
+
+PYTHON_APP=$(which python2.6)           # Find the python executable
+
+TMP_FILE="/tmp/.subliminal-upgrade";    # Tmp file variable
+
+echo "======================"
+echo -n `date +%Y-%m-%d\ %H:%M`;
+echo ": Updating Subliminal";
+echo "";
+
+# Eerst testen of het proces nog niet draait.
+# Dit doe ik aan de hand van het bestaan van een tempfile.
+if [ -f $TMP_FILE ]
+    then
+        echo "Er draait al een update, dus niet nog een starten."
+        # Stoppen met verdere update aangezien de file al aanwezig is.
+        exit
+fi
+
+# Tempfile aanmaken aangezien de update nog niet draait
+touch $TMP_FILE
+wait;
+
+if $GIT_APP --git-dir="${PATH_TO_SUBLIMINAL}/.git" pull | grep 'files changed';
+    then
+        echo "Update downloaded"
+        echo "Installing new Subliminal version"
+        echo ""
+        $PYTHON_APP ${PATH_TO_SUBLIMINAL}/setup.py install
+        echo ""
+        wait
+        # Tempfile weer opruimen, anders wordt er maar eenmalig ge-update.
+        rm $TMP_FILE
+        echo "Finished!"
+    else
+        rm $TMP_FILE
+        echo "No update available"
+fi
+
+echo ""
+echo -n `date +%Y-%m-%d\ %H:%M`;
+echo ": Updating ended";
+echo "======================";
