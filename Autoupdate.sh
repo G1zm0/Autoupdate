@@ -17,9 +17,9 @@
 PATH_TO_SICKBEARD=/usr/local/var/sickbeard
 PATH_TO_SCRIPTS_SICKBEARD=/var/packages/SickBeard/scripts
 PATH_TO_COUCHPOTATO=/usr/local/var/couchpotato
-PATH_TO_SCRIPTS_COUCHPOTATO=/var/packages/SickBeard/scripts
+PATH_TO_SCRIPTS_COUCHPOTATO=/var/packages/CouchPotato/scripts
 PATH_TO_HEADPHONES=/usr/local/var/headphones
-PATH_TO_SCRIPTS_HEADPHONES=/var/packages/SickBeard/scripts
+PATH_TO_SCRIPTS_HEADPHONES=/var/packages/Headphones/scripts
 PATH_TO_SUBLIMINAL=/volume1/@appstore/subliminal
 
 GIT_APP=$(which git)	                		# Find the git
@@ -59,7 +59,7 @@ update_sickbeard () {
     echo "* Updating  ..."
 #    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD pull" || exit 1
 #	$GIT_APP clone git://github.com/G1zm0/Autoupdate.git $PATH_TO_SICKBEARD
-	$PYTHON_APP /usr/local/var/sickbeard/lib/pygithub/githubsync.py
+	$PYTHON_APP /usr/local/var/sickbeard/lib/pygithub/githubsync.py sickbeard https://github.com/midgetspy/Sick-Beard.git
 	
 	start_sickbeard
 }
@@ -68,7 +68,7 @@ update_sickbeard;
 # Step 2 update Couchpotato
 
 # Check if Couchpotato is installed correct
-cochpotato_dir_check () {
+couchpotato_dir_check () {
     if [ $PATH_TO_COUCHPOTATO ]; then    
         if [ ! -d $PATH_TO_COUCHPOTATO ]; then
             echo "Couchpotato not installed or no Zebulon Package used!";
