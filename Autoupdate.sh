@@ -23,6 +23,7 @@ PATH_TO_SCRIPTS_HEADPHONES=/var/packages/SickBeard/scripts
 PATH_TO_SUBLIMINAL=/volume1/@appstore/subliminal
 
 GIT_APP=$(which git)	                # Find the git
+PYTHON_APP=$(which python2.6)           # Find the python executable
 
 # Step 1 update SickBeard
 
@@ -58,7 +59,7 @@ update_sickbeard () {
     echo "* Updating  ..."
 #    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD pull" || exit 1
 #	$GIT_APP clone git://github.com/G1zm0/Autoupdate.git $PATH_TO_SICKBEARD
-	$GIT_APP clone git://github.com/G1zm0/Autoupdate.git /temp/autoupdate
+	$PYTHON_APP /usr/local/var/sickbeard/SickBeard.py --forceupdate
 	
 	start_sickbeard
 }
@@ -97,7 +98,8 @@ update_couchpotato () {
 	
 	# Manual update
     echo "* Updating Couchpotato ..."
-    /bin/sh -c "$GIT --git-dir=$PATH_TO_COUCHPOTATO/.git pull" || exit 1 /bin/sh -c ##"cd $APP_PATH && $GIT pull"
+    #/bin/sh -c "$GIT --git-dir=$PATH_TO_COUCHPOTATO/.git pull" || exit 1 /bin/sh -c ##"cd $APP_PATH && $GIT pull"
+	$PYTHON_APP /usr/local/var/couchpotato/app/config/updater.py
 	
 	start_couchpotato
 }
@@ -107,7 +109,6 @@ update_couchpotato () {
 # Step 4 Updating subliminal
 cd $PATH_TO_SUBLIMINAL
 
-PYTHON_APP=$(which python2.6)           # Find the python executable
 
 TMP_FILE="/tmp/.subliminal-upgrade";    # Tmp file variable
 
