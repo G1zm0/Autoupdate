@@ -5,7 +5,7 @@
 #
 # Author: K.Meun (Gizmo)
 #
-# Location: /volume1/@appstore/scripts
+# Location: /volume1/@appstore/autoupdate
 #
 # Version:
 #
@@ -24,7 +24,7 @@ PATH_TO_SUBLIMINAL=/volume1/@appstore/subliminal
 
 GIT_APP=$(which git)	                # Find the git
 
-#step 1 update SickBeard
+# Step 1 update SickBeard
 
 # Check if Sickbeard is installed correct
 sickbeard_dir_check () {
@@ -34,6 +34,7 @@ sickbeard_dir_check () {
             echo "Skipping";
 			break;
         fi
+		echo "SickBeard is installed properly starting update";
     fi
 }
 #Update function
@@ -54,14 +55,16 @@ update_sickbeard () {
 	stop_sickbeard
 	
 	# Manual update
-    echo "* Updating $DESC ..."
-    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD pull" || exit 1
+    echo "* Updating  ..."
+#    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD pull" || exit 1
+#	$GIT_APP clone git://github.com/G1zm0/Autoupdate.git $PATH_TO_SICKBEARD
+	$GIT_APP clone git://github.com/G1zm0/Autoupdate.git /temp/autoupdate
 	
 	start_sickbeard
 }
 update_sickbeard;
 
-# step 2 update Couchpotato
+# Step 2 update Couchpotato
 
 # Check if Couchpotato is installed correct
 sickbeard_dir_check () {
@@ -71,6 +74,7 @@ sickbeard_dir_check () {
             echo "Skipping";
 			break;
         fi
+		echo "Couchpotato is installed properly starting update";
     fi
 }
 
@@ -92,15 +96,15 @@ update_couchpotato () {
 	stop_couchpotato
 	
 	# Manual update
-    echo "* Updating $DESC ..."
+    echo "* Updating Couchpotato ..."
     /bin/sh -c "$GIT --git-dir=$PATH_TO_COUCHPOTATO/.git pull" || exit 1 /bin/sh -c ##"cd $APP_PATH && $GIT pull"
 	
 	start_couchpotato
 }
 
+# Step 3 Updating Headphones
 
-
-# step 4 Updating subliminal
+# Step 4 Updating subliminal
 cd $PATH_TO_SUBLIMINAL
 
 PYTHON_APP=$(which python2.6)           # Find the python executable
