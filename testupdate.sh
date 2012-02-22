@@ -30,10 +30,11 @@ PYTHON_APP=/usr/local/python26/bin/python		# python26 executable
 # Check if Sickbeard is installed correct
 sickbeard_dir_check () {
     if [ $PATH_TO_SICKBEARD ]; then    
-        if [ ! -d $PATH_TO_SICKBEARD ]; then
+        if [ ! -d $PATH_TO_SICKBEARD ]; then {
             echo "Sickbeard not installed or no Zebulon Package used!";
             echo "Skipping";
 			break;
+			}
         fi
 		echo "SickBeard is installed properly starting update";
     fi
@@ -61,7 +62,7 @@ update_sickbeard () {
 #	mkdir $PATH_TO_SICKBEARD/.git
 	mkdir ~/test/.git
 	git clone --bare https://github.com/midgetspy/Sick-Beard.git ~/test/.git
-	sh -c "$GIT --git-dir=$PATH_TO_SICKBEARD/.git pull" || exit 1
+	sh -c "$GIT /test/.git pull" || exit 1
 	rm -rf ~/test/.git
 	
 #	start_sickbeard
