@@ -27,43 +27,38 @@ PYTHON_APP=/usr/local/python26/bin/python		# python26 executable
 
 # Step 1 update SickBeard
 
-# Check if Sickbeard is installed correct
-sickbeard_dir_check () {
-    if [ $PATH_TO_SICKBEARD ]; then    
-        if [ ! -d $PATH_TO_SICKBEARD ]; then
-            echo "Sickbeard not installed or no Zebulon Package used!";
-            echo "Skipping";
-			break;
-        fi
-		echo "SickBeard is installed properly starting update";
-    fi
-}
-#Update function
-
+#Stop function
 stop_sickbeard () {
 	$PATH_TO_SCRIPTS_SICKBEARD/start-stop-status stop;
-}
-
+	}
+# Start function
 start_sickbeard () {
 	$PATH_TO_SCRIPTS_SICKBEARD/start-stop-status start;
-}
+	}
 
+# Update function
 update_sickbeard () {
     #Start
+	# Check if Sickbeard is installed correct
 	echo "* Starting Sickbeard update ...";
 	
-	sickbeard_dir_check
+	    if [ ! -d $PATH_TO_SICKBEARD ]; then {
+        echo "Sickbeard not installed or no Zebulon Package used!";
+        echo "Skipping";
+		break;
+		}
+    else
+	echo "SickBeard is installed properly starting update";
+    fi
+
 	stop_sickbeard
 	
-	# Manual update
+	# Start update
     echo "* Updating  ..."
-#    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD pull" || exit 1
-#	$GIT_APP clone git://github.com/G1zm0/Autoupdate.git $PATH_TO_SICKBEARD
-#	$PYTHON_APP /usr/local/var/sickbeard/lib/pygithub/githubsync.py sickbeard https://github.com/midgetspy/Sick-Beard.git
-	mkdir $PATH_TO_SICKBEARD/.git
-	git clone --bare https://github.com/midgetspy/Sick-Beard.git $PATH_TO_SICKBEARD/.git
-	su $RUN_AS -s /bin/sh -c "$GIT --git-dir=$PATH_TO_SICKBEARD/.git pull" || exit 1
-	rm -rf $PATH_TO_SICKBEARD/.git
+
+	cd $PATH_TO_SICKBEARD && $GIT_APP clone https://github.com/midgetspy/Sick-Beard.git ~/test
+
+	rm $PATH_TO_SICKBEARD/.git
 	
 	start_sickbeard
 }
@@ -72,17 +67,6 @@ update_sickbeard;
 # Step 2 update Couchpotato
 
 # Check if Couchpotato is installed correct
-couchpotato_dir_check () {
-    if [ $PATH_TO_COUCHPOTATO ]; then    
-        if [ ! -d $PATH_TO_COUCHPOTATO ]; then
-            echo "Couchpotato not installed or no Zebulon Package used!";
-            echo "Skipping";
-			break;
-        fi
-		echo "Couchpotato is installed properly starting update";
-    fi
-}
-
 
 stop_couchpotato () {
 	$PATH_TO_SCRIPTS_COUCHPOTATO/start-stop-status stop;
@@ -94,18 +78,33 @@ start_couchpotato () {
 
 #Update function
 update_couchpotato () {
-    #Start
-	echo "* Starting Couchpotato update ...";
+    # Start
+	# Check if Sickbeard is installed correct
+	echo "* Starting Sickbeard update ...";
 	
-	couchpotato_dir_check
-	stop_couchpotato
+	    if [ ! -d $PATH_TO_SICKBEARD ]; then {
+        echo "Sickbeard not installed or no Zebulon Package used!";
+        echo "Skipping";
+		break;
+		}
+    else
+	echo "SickBeard is installed properly starting update";
+    fi
+
+	stop_sickbeard
 	
-	# Manual update
-    echo "* Updating Couchpotato ..."
-    #/bin/sh -c "$GIT --git-dir=$PATH_TO_COUCHPOTATO/.git pull" || exit 1 /bin/sh -c ##"cd $APP_PATH && $GIT pull"
-	$PYTHON_APP /usr/local/var/couchpotato/app/config/updater.py
+	# Start update
+    echo "* Updating  ..."
+
+
+#	mkdir $PATH_TO_SICKBEARD/.git
+
+
+	cd ~/test/ && $GIT_APP clone https://github.com/midgetspy/Sick-Beard.git ~/test
+
+	rm -rf ~/test/.git
 	
-	start_couchpotato
+#	start_sickbeard
 }
 
 update_couchpotato
