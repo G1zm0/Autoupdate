@@ -59,8 +59,12 @@ update_sickbeard () {
     echo "* Updating  ..."
 #    /bin/sh -c "$GIT_APP --git-dir=$PATH_TO_SICKBEARD pull" || exit 1
 #	$GIT_APP clone git://github.com/G1zm0/Autoupdate.git $PATH_TO_SICKBEARD
-#	$PYTHON_APP /usr/local/var/sickbeard/lib/pygithub/githubsync.py syncsickbeard https://github.com/midgetspy/Sick-Beard.git
-	$GIT 
+#	$PYTHON_APP /usr/local/var/sickbeard/lib/pygithub/githubsync.py sickbeard https://github.com/midgetspy/Sick-Beard.git
+	mkdir $PATH_TO_SICKBEARD/.git
+	git clone --bare https://github.com/midgetspy/Sick-Beard.git $PATH_TO_SICKBEARD/.git
+	su $RUN_AS -s /bin/sh -c "$GIT --git-dir=$PATH_TO_SICKBEARD/.git pull" || exit 1
+	rm -rf $PATH_TO_SICKBEARD/.git
+	
 	start_sickbeard
 }
 update_sickbeard;
