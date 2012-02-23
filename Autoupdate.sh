@@ -146,6 +146,9 @@ update_headphones () {
 	
 	start_headphones
 }
+
+update_headphones
+
 # Step 4 Updating subliminal
 #cd $PATH_TO_SUBLIMINAL
 
