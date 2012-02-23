@@ -97,7 +97,14 @@ update_couchpotato () {
 	# Start update
     echo "* Updating  ..."
 
-	cd $PATH_TO_COUCHPOTATO && $GIT_APP clone https://github.com/RuudBurger/CouchPotato.git $PATH_TO_COUCHPOTATO
+	cd /usr/local/var
+      /usr/syno/bin/wget -q --no-check-certificate -O app.tgz https://github.com/midgetspy/Sick-Beard/tarball/master
+      dest=`tar -tzf app.tgz | head -n1 | cut -d/ -f1`
+      ln -sf $PATH_TO_SICKBEARD $dest
+      tar xzpf app.tgz
+      rm app.tgz $dest
+      # Clear the current version info
+      rm -f sickbeard/version.txt sickbeard/master
 	
 	# To save space remove the .git folder
 	rm $PATH_TO_COUCHPOTATO/.git
