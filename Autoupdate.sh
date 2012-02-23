@@ -54,14 +54,14 @@ update_sickbeard () {
 	stop_sickbeard
 	
 	# Start update
-    echo " Updating  ..."
+    echo "Updating  ..."
 
 	cd /usr/local/var
-    /usr/syno/bin/wget -q --no-check-certificate -O app.tgz https://github.com/midgetspy/Sick-Beard/tarball/master
-    dest=`tar -tzf app.tgz | head -n1 | cut -d/ -f1`
-    ln -sf $PATH_TO_SICKBEARD $dest
-    tar xzpf app.tgz
-    rm app.tgz $dest
+	/usr/syno/bin/wget -q --no-check-certificate -O app.tgz https://github.com/midgetspy/Sick-Beard/tarball/master
+	dest=`tar -tzf app.tgz | head -n1 | cut -d/ -f1`
+	ln -sf $PATH_TO_SICKBEARD $dest
+	tar xzpf app.tgz
+	rm app.tgz $dest
     # Clear the current version info
     rm -f sickbeard/version.txt sickbeard/master
 
