@@ -40,7 +40,7 @@ start_sickbeard () {
 update_sickbeard () {
     #Start
 	# Check if Sickbeard is installed correct
-	echo "* Starting Sickbeard update ...";
+	echo " Starting Sickbeard update ...";
 	
 	if [ ! -d $PATH_TO_SICKBEARD ]; then {
         echo "Sickbeard not installed or no Zebulon Package used!";
@@ -54,12 +54,19 @@ update_sickbeard () {
 	stop_sickbeard
 	
 	# Start update
-    echo "* Updating  ..."
+    echo " Updating  ..."
 
-	cd $PATH_TO_SICKBEARD && $GIT_APP clone https://github.com/midgetspy/Sick-Beard.git $PATH_TO_SICKBEARD
+	cd /usr/local/var
+    /usr/syno/bin/wget -q --no-check-certificate -O app.tgz https://github.com/midgetspy/Sick-Beard/tarball/master
+    dest=`tar -tzf app.tgz | head -n1 | cut -d/ -f1`
+    ln -sf $PATH_TO_SICKBEARD $dest
+    tar xzpf app.tgz
+    rm app.tgz $dest
+    # Clear the current version info
+    rm -f sickbeard/version.txt sickbeard/master
 
 	# To save space remove the .git folder
-	rm $PATH_TO_SICKBEARD/.git
+	#rm $PATH_TO_SICKBEARD/.git
 	
 	start_sickbeard
 }
@@ -80,8 +87,8 @@ start_couchpotato () {
 #Update function
 update_couchpotato () {
     # Start
-	# Check if Sickbeard is installed correct
-	echo "* Starting Sickbeard update ...";
+	# Check if Couchpotato is installed correct
+	echo " CouchpotatoStarting Sickbeard update ...";
 	
 	if [ ! -d $PATH_TO_COUCHPOTATO ]; then {
         echo "Couchpotato not installed or no Zebulon Package used!";
@@ -95,16 +102,9 @@ update_couchpotato () {
 	stop_couchpotato
 	
 	# Start update
-    echo "* Updating  ..."
+	echo " Updating  ..."
 
-	cd /usr/local/var
-      /usr/syno/bin/wget -q --no-check-certificate -O app.tgz https://github.com/midgetspy/Sick-Beard/tarball/master
-      dest=`tar -tzf app.tgz | head -n1 | cut -d/ -f1`
-      ln -sf $PATH_TO_SICKBEARD $dest
-      tar xzpf app.tgz
-      rm app.tgz $dest
-      # Clear the current version info
-      rm -f sickbeard/version.txt sickbeard/master
+	cd $PATH_TO_COUCHPOTATO && $GIT_APP clone https://github.com/RuudBurger/CouchPotato.git $PATH_TO_COUCHPOTATO
 	
 	# To save space remove the .git folder
 	rm $PATH_TO_COUCHPOTATO/.git
@@ -130,7 +130,7 @@ start_headphones () {
 update_headphones () {
     # Start
 	# Check if Headphones is installed correct
-	echo "* Starting Headphones update ...";
+	echo " Starting Headphones update ...";
 	
 	if [ ! -d $PATH_TO_HEADPHONES ]; then {
         echo "Headphones not installed or no Zebulon Package used!";
@@ -144,7 +144,7 @@ update_headphones () {
 	stop_headphones
 	
 	# Start update
-    echo "* Updating  ..."
+	echo " Updating  ..."
 
 	cd $PATH_TO_HEADPHONES && $GIT_APP clone https://github.com/rembo10/headphones.git $PATH_TO_HEADPHONES
 	
