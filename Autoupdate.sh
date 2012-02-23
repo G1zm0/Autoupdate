@@ -23,7 +23,7 @@ PATH_TO_SCRIPTS_HEADPHONES=/var/packages/Headphones/scripts
 PATH_TO_SUBLIMINAL=/volume1/@appstore/subliminal
 
 GIT_APP=$(which git)	                		# Find the git
-PYTHON_APP=/usr/local/python26/bin/python		# python26 executable
+PYTHON26_APP=/usr/local/python26/bin/python		# python26 executable
 
 # Step 1 update SickBeard
 
@@ -42,7 +42,7 @@ update_sickbeard () {
 	# Check if Sickbeard is installed correct
 	echo "* Starting Sickbeard update ...";
 	
-	    if [ ! -d $PATH_TO_SICKBEARD ]; then {
+	if [ ! -d $PATH_TO_SICKBEARD ]; then {
         echo "Sickbeard not installed or no Zebulon Package used!";
         echo "Skipping";
 		break;
@@ -56,8 +56,9 @@ update_sickbeard () {
 	# Start update
     echo "* Updating  ..."
 
-	cd $PATH_TO_SICKBEARD && $GIT_APP clone https://github.com/midgetspy/Sick-Beard.git ~/test
+	cd $PATH_TO_SICKBEARD && $GIT_APP clone https://github.com/midgetspy/Sick-Beard.git $PATH_TO_SICKBEARD
 
+	# To save space remove the .git folder
 	rm $PATH_TO_SICKBEARD/.git
 	
 	start_sickbeard
@@ -66,12 +67,12 @@ update_sickbeard;
 
 # Step 2 update Couchpotato
 
-# Check if Couchpotato is installed correct
-
+# Stop function for couchpotato
 stop_couchpotato () {
 	$PATH_TO_SCRIPTS_COUCHPOTATO/start-stop-status stop;
 }
 
+# Start punction for couchpotato
 start_couchpotato () {
 	$PATH_TO_SCRIPTS_COUCHPOTATO/start-stop-status start;
 }
@@ -82,35 +83,69 @@ update_couchpotato () {
 	# Check if Sickbeard is installed correct
 	echo "* Starting Sickbeard update ...";
 	
-	    if [ ! -d $PATH_TO_SICKBEARD ]; then {
-        echo "Sickbeard not installed or no Zebulon Package used!";
+	if [ ! -d $PATH_TO_COUCHPOTATO ]; then {
+        echo "Couchpotato not installed or no Zebulon Package used!";
         echo "Skipping";
 		break;
 		}
     else
-	echo "SickBeard is installed properly starting update";
+	echo "Couchpotato is installed properly starting update";
     fi
 
-	stop_sickbeard
+	stop_couchpotato
 	
 	# Start update
     echo "* Updating  ..."
 
-
-#	mkdir $PATH_TO_SICKBEARD/.git
-
-
-	cd ~/test/ && $GIT_APP clone https://github.com/midgetspy/Sick-Beard.git ~/test
-
-	rm -rf ~/test/.git
+	cd $PATH_TO_COUCHPOTATO && $GIT_APP clone https://github.com/RuudBurger/CouchPotato.git $PATH_TO_COUCHPOTATO
 	
-#	start_sickbeard
+	# To save space remove the .git folder
+	rm $PATH_TO_COUCHPOTATO/.git
+	
+	start_couchpotato
 }
 
 update_couchpotato
 
-# Step 3 Updating Headphones
+# Step 3 Updating headphones
 
+# Stop function for headphones
+stop_headphones () {
+	$PATH_TO_SCRIPTS_HEADPHONES/start-stop-status stop;
+}
+
+# Start punction for headphones
+start_headphones () {
+	$PATH_TO_SCRIPTS_HEADPHONES/start-stop-status start;
+}
+
+#Update function
+update_headphones () {
+    # Start
+	# Check if Headphones is installed correct
+	echo "* Starting Headphones update ...";
+	
+	if [ ! -d $PATH_TO_HEADPHONES ]; then {
+        echo "Headphones not installed or no Zebulon Package used!";
+        echo "Skipping";
+		break;
+		}
+    else
+	echo "Headphones is installed properly starting update";
+    fi
+
+	stop_headphones
+	
+	# Start update
+    echo "* Updating  ..."
+
+	cd $PATH_TO_HEADPHONES && $GIT_APP clone https://github.com/rembo10/headphones.git $PATH_TO_HEADPHONES
+	
+	# To save space remove the .git folder
+	rm $PATH_TO_HEADPHONES/.git
+	
+	start_headphones
+}
 # Step 4 Updating subliminal
 #cd $PATH_TO_SUBLIMINAL
 
